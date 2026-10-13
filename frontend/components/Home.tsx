@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Events from "@/components/Events";
 import Picks from "@/components/Picks";
+import PracticalInfo from "@/components/PracticalInfo";
 
 export default function Home() {
   return (
@@ -19,9 +20,7 @@ export default function Home() {
           <h2>La librairie</h2>
         </section>
 
-        <section>
-          <h2>Infos pratiques</h2>
-        </section>
+        <PracticalInfo />
       </main>
 
       <footer>
