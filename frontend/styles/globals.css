@@ -1,7 +1,15 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --olive: #5e6538;
+  --olive-dark: #3f4426;
+  --cream: #f6f1e7;
+  --burgundy: #6d1f2b;
+  --lime: #c3d26a;
+  --ink: #2a2924;
+
+  --background: var(--cream);
+  --foreground: var(--ink);
 }
+
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -35,8 +43,9 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+header {
+  background: var(--olive);
+  color: var(--cream);
+  padding: 1rem 2rem;
 }
+
