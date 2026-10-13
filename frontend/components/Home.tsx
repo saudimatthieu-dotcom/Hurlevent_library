@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Hero from "@/components/Hero";
 
 export default function Home() {
   return (
@@ -6,10 +7,7 @@ export default function Home() {
       <Header />
 
       <main>
-        <section>
-          <h1>Librairie Hurlevent</h1>
-          <p>238 rue de Belleville, Paris 20e</p>
-        </section>
+        <Hero />
 
         <section>
           <h2>Rencontres & dédicaces</h2>

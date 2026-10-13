@@ -1,0 +1,35 @@
+.hero {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.photo {
+  object-fit: cover;
+}
+
+.content {
+  position: relative;
+  width: 100%;
+  padding: 3rem 2rem;
+  color: var(--cream);
+  background: linear-gradient(transparent, rgba(42, 41, 36, 0.85));
+}
+
+.title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.tagline {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.mapLink {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--lime);
+  border-bottom: 1px solid var(--lime);
+}
