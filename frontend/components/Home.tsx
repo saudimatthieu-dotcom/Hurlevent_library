@@ -2,7 +2,9 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Events from "@/components/Events";
 import Picks from "@/components/Picks";
+import About from "@/components/About";
 import PracticalInfo from "@/components/PracticalInfo";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -16,16 +18,12 @@ export default function Home() {
 
         <Picks />
 
-        <section>
-          <h2>La librairie</h2>
-        </section>
+        <About />
 
         <PracticalInfo />
       </main>
 
-      <footer>
-        <p>© Librairie Hurlevent</p>
-      </footer>
+      <Footer />
     </>
   );
 }
