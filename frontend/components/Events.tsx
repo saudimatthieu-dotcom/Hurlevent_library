@@ -1,6 +1,7 @@
 import styles from "@/styles/Events.module.css";
 import { events } from "@/data/events";
 import type { ShopEvent } from "@/types/ShopEvent";
+import { useState } from "react";
 
 function formatDate(isoDate: string): string {
   return new Date(isoDate).toLocaleDateString("fr-FR", {
@@ -10,15 +11,26 @@ function formatDate(isoDate: string): string {
   });
 }
 
+function getToday(): string {
+  return new Date().toISOString().slice(0, 10); // "2026-10-13"
+}
+
 function getUpcomingEvents(): ShopEvent[] {
-  const today = new Date().toISOString().slice(0, 10); // "2026-10-13"
   return events
-    .filter((event) => event.date >= today)
+    .filter((event) => event.date >= getToday())
     .sort((a, b) => a.date.localeCompare(b.date));
 }
 
+function getPastEvents(): ShopEvent[] {
+  return events
+    .filter((event) => event.date < getToday())
+    .sort((a, b) => b.date.localeCompare(a.date));
+}
+
 export default function Events() {
+  const [showPast, setShowPast] = useState(false);
   const upcomingEvents = getUpcomingEvents();
+  const pastEvents = getPastEvents();
 
   return (
     <section className={styles.events}>
@@ -39,6 +51,31 @@ export default function Events() {
           </li>
         ))}
       </ul>
+
+      {pastEvents.length > 0 && (
+        <button
+          className={styles.toggle}
+          onClick={() => setShowPast(!showPast)}
+        >
+          {showPast
+            ? "Masquer les rencontres passées"
+            : "Voir les rencontres passées"}
+        </button>
+      )}
+
+      {showPast && (
+        <ul className={`${styles.list} ${styles.past}`}>
+          {pastEvents.map((event) => (
+            <li key={event.id} className={styles.card}>
+              <p className={styles.date}>
+                {formatDate(event.date)} · {event.time}
+              </p>
+              <h3>{event.title}</h3>
+              <p>{event.description}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   );
 }

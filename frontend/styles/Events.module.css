@@ -30,3 +30,24 @@
 .date::first-letter {
   text-transform: uppercase;
 }
+
+.toggle {
+  margin-top: 2rem;
+  padding: 0.6rem 1.2rem;
+  background: transparent;
+  color: var(--cream);
+  border: 1px solid var(--cream);
+  border-radius: 999px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.toggle:hover {
+  background: var(--cream);
+  color: var(--olive);
+}
+
+.past {
+  margin-top: 1.5rem;
+  opacity: 0.7;
+}
