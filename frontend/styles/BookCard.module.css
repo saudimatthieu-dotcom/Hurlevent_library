@@ -1,0 +1,25 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cover {
+  width: 100%;
+  height: auto;
+  box-shadow: 0 4px 12px rgba(42, 41, 36, 0.25);
+}
+
+.title {
+  font-size: 1.4rem;
+  margin-top: 0.6rem;
+}
+
+.author {
+  color: var(--olive);
+}
+
+.note {
+  font-style: italic;
+  color: var(--burgundy);
+}

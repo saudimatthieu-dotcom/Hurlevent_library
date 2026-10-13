@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Events from "@/components/Events";
+import Picks from "@/components/Picks";
 
 export default function Home() {
   return (
@@ -12,9 +13,7 @@ export default function Home() {
 
         <Events />
 
-        <section>
-          <h2>Nos coups de cœur</h2>
-        </section>
+        <Picks />
 
         <section>
           <h2>La librairie</h2>
