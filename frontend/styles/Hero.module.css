@@ -33,3 +33,23 @@
   color: var(--lime);
   border-bottom: 1px solid var(--lime);
 }
+
+.open,
+.closed {
+  display: block;
+  width: fit-content;
+  margin-top: 0.8rem;
+  padding: 0.2rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+.open {
+  background: var(--lime);
+  color: var(--ink);
+}
+
+.closed {
+  background: var(--burgundy);
+  color: var(--cream);
+}
