@@ -17,7 +17,7 @@ export default function Hero() {
         <p className={styles.tagline}>Librairie indépendante · Paris 20e</p>
         <p>238 rue de Belleville · Métro Télégraphe (ligne 11)</p>
         <a
-          href="https://www.google.com/maps/search/?api=1&query=238+rue+de+Belleville+75020+Paris"
+          href="https://www.google.com/maps/search/?api=1&query=Librairie+Hurlevent+238+rue+de+Belleville+Paris"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.mapLink}
