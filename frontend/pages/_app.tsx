@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Cormorant_Garamond, Inter } from "next/font/google";
+import Layout from "@/components/Layout";
 
 const serif = Cormorant_Garamond({
   subsets: ["latin"],
@@ -10,14 +11,16 @@ const serif = Cormorant_Garamond({
 
 const sans = Inter({
   subsets: ["latin"],
-  variable: "--font-sans"
+  variable: "--font-sans",
 });
-
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className={`${serif.variable} ${sans.className}`}>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </div>
   );
 }
+
