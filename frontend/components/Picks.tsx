@@ -1,14 +1,22 @@
 import styles from "@/styles/Picks.module.css";
 import BookCard from "@/components/BookCard";
-import { picks } from "@/data/picks";
+import type { Pick } from "@/types/Book";
 
-export default function Picks() {
+type PicksProps = {
+  picks: Pick[];
+};
+
+export default function Picks({ picks }: PicksProps) {
+  if (picks.length === 0) {
+    return null;
+  }
+
   return (
     <section className={styles.picks}>
       <h2 className={styles.title}>Nos coups de cœur</h2>
       <div className={styles.grid}>
         {picks.map((book) => (
-          <BookCard key={book.isbn} book={book} />
+          <BookCard key={book._id} book={book} />
         ))}
       </div>
     </section>

@@ -13,11 +13,18 @@
   gap: 0.3rem;
 }
 
-.field input {
+.field input,
+.field textarea,
+.inline input {
   padding: 0.6rem;
   border: 1px solid var(--olive);
   border-radius: 4px;
+  background: #fff;
   font: inherit;
+}
+
+.field textarea {
+  resize: vertical;
 }
 
 .error {
@@ -40,6 +47,106 @@
 .secondary {
   background: none;
   color: var(--olive);
+}
+
+.danger {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--burgundy);
+  border-radius: 999px;
+  background: none;
+  color: var(--burgundy);
+  cursor: pointer;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(42, 41, 36, 0.15);
+}
+
+.tab {
+  padding: 0.7rem 1rem;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: none;
+  color: var(--olive);
+  font: inherit;
+  cursor: pointer;
+}
+
+.activeTab {
+  border-bottom-color: var(--olive);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.tabContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 40rem;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: rgba(101, 105, 72, 0.08);
+}
+
+.formTitle {
+  font-size: 1.6rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.inline {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.inline input {
+  flex: 1;
+  min-width: 0;
+}
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.pickerResults {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  max-height: 22rem;
+  overflow-y: auto;
+}
+
+.pickerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(42, 41, 36, 0.1);
+}
+
+.grow {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 14rem;
 }
 
 .panel {
@@ -104,4 +211,14 @@
 .collected,
 .cancelled {
   background: rgba(42, 41, 36, 0.45);
+}
+
+@media (max-width: 600px) {
+  .panel {
+    padding: 2rem 1rem;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
 }

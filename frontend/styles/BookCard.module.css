@@ -10,6 +10,20 @@
   box-shadow: 0 4px 12px rgba(42, 41, 36, 0.25);
 }
 
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 2 / 3;
+  padding: 1rem;
+  background: var(--olive);
+  color: var(--cream);
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(42, 41, 36, 0.25);
+}
+
 .title {
   font-size: 1.4rem;
   margin-top: 0.6rem;

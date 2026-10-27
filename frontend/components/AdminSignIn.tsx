@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from "@/styles/Admin.module.css";
-import { API_URL } from "@/utils/api";
+import { apiRequest, NETWORK_ERROR } from "@/utils/api";
 
 type AdminSignInProps = {
   onSignIn: (token: string) => void;
@@ -13,15 +13,18 @@ export default function AdminSignIn({ onSignIn }: AdminSignInProps) {
 
   async function handleSubmit() {
     setError(null);
-    const response = await fetch(`${API_URL}/admins/signin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await response.json();
+    const data = await apiRequest<{ token: string }>("/admins/signin", "POST", { email, password });
 
+    if (!data) {
+      setError(NETWORK_ERROR);
+      return;
+    }
     if (!data.result) {
-      setError("Email ou mot de passe incorrect.");
+      setError(
+        data.error === "Too many requests, try again later"
+          ? "Trop de tentatives. Réessayez dans un quart d’heure."
+          : "Email ou mot de passe incorrect."
+      );
       return;
     }
 

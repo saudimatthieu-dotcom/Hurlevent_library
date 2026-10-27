@@ -1,5 +1,98 @@
+.page {
+  padding: 4rem 2rem;
+}
+
+.pageTitle {
+  font-size: 3rem;
+}
+
+.intro {
+  max-width: 40rem;
+  margin: 0.8rem 0 2rem;
+}
+
+.search {
+  display: flex;
+  gap: 0.6rem;
+  max-width: 36rem;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--olive);
+  border-radius: 999px;
+  background: var(--cream);
+  font: inherit;
+}
+
+.searchButton {
+  padding: 0.7rem 1.4rem;
+  border: 1px solid var(--olive);
+  border-radius: 999px;
+  background: var(--olive);
+  color: var(--cream);
+  cursor: pointer;
+}
+
+.searchButton:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.error {
+  margin-top: 1rem;
+  color: var(--burgundy);
+}
+
+.hint {
+  margin: 1rem 0 1.5rem;
+  color: var(--olive);
+}
+
+.results {
+  margin-top: 2.5rem;
+}
+
+.resultsTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.clear {
+  border: none;
+  background: none;
+  color: var(--olive);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.categoryNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 3rem;
+}
+
+.categoryLink {
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--olive);
+  border-radius: 999px;
+  color: var(--olive);
+}
+
+.categoryLink:hover {
+  background: var(--olive);
+  color: var(--cream);
+}
+
 .category {
   margin-top: 3rem;
+  scroll-margin-top: 1.5rem;
 }
 
 .categoryTitle {
@@ -11,4 +104,19 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 2rem;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 2.5rem 1rem;
+  }
+
+  .pageTitle {
+    font-size: 2.2rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+  }
 }

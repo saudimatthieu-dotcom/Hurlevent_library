@@ -1,7 +1,10 @@
 import styles from "@/styles/Events.module.css";
-import { events } from "@/data/events";
 import type { ShopEvent } from "@/types/ShopEvent";
 import { useState } from "react";
+
+type EventsProps = {
+  events: ShopEvent[];
+};
 
 function formatDate(isoDate: string): string {
   return new Date(isoDate).toLocaleDateString("fr-FR", {
@@ -15,22 +18,22 @@ function getToday(): string {
   return new Date().toISOString().slice(0, 10); // "2026-10-13"
 }
 
-function getUpcomingEvents(): ShopEvent[] {
+function getUpcomingEvents(events: ShopEvent[]): ShopEvent[] {
   return events
     .filter((event) => event.date >= getToday())
     .sort((a, b) => a.date.localeCompare(b.date));
 }
 
-function getPastEvents(): ShopEvent[] {
+function getPastEvents(events: ShopEvent[]): ShopEvent[] {
   return events
     .filter((event) => event.date < getToday())
     .sort((a, b) => b.date.localeCompare(a.date));
 }
 
-export default function Events() {
+export default function Events({ events }: EventsProps) {
   const [showPast, setShowPast] = useState(false);
-  const upcomingEvents = getUpcomingEvents();
-  const pastEvents = getPastEvents();
+  const upcomingEvents = getUpcomingEvents(events);
+  const pastEvents = getPastEvents(events);
 
   return (
     <section className={styles.events}>
@@ -42,7 +45,7 @@ export default function Events() {
 
       <ul className={styles.list}>
         {upcomingEvents.map((event) => (
-          <li key={event.id} className={styles.card}>
+          <li key={event._id} className={styles.card}>
             <p className={styles.date}>
               {formatDate(event.date)} · {event.time}
             </p>
@@ -66,7 +69,7 @@ export default function Events() {
       {showPast && (
         <ul className={`${styles.list} ${styles.past}`}>
           {pastEvents.map((event) => (
-            <li key={event.id} className={styles.card}>
+            <li key={event._id} className={styles.card}>
               <p className={styles.date}>
                 {formatDate(event.date)} · {event.time}
               </p>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "@/styles/ReservationForm.module.css";
 import type { Book } from "@/types/Book";
-import { API_URL } from "@/utils/api";
+import { apiRequest, NETWORK_ERROR } from "@/utils/api";
 
 type ReservationFormProps = {
   book: Book;
@@ -13,6 +13,7 @@ export default function ReservationForm({ book, onClose }: ReservationFormProps)
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isSending, setIsSending] = useState(false);
   const [isSent, setIsSent] = useState(false);
 
   async function handleSubmit() {
@@ -21,20 +22,22 @@ export default function ReservationForm({ book, onClose }: ReservationFormProps)
       return;
     }
 
-    const response = await fetch(`${API_URL}/reservations`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        isbn: book.isbn,
-        title: book.title,
-        author: book.author,
-        customerName,
-        phone,
-        email: email.trim() || undefined,
-      }),
+    setError(null);
+    setIsSending(true);
+    const data = await apiRequest("/reservations", "POST", {
+      isbn: book.isbn,
+      title: book.title,
+      author: book.author,
+      customerName,
+      phone,
+      email: email.trim() || undefined,
     });
-    const data = await response.json();
+    setIsSending(false);
 
+    if (!data) {
+      setError(NETWORK_ERROR);
+      return;
+    }
     if (!data.result) {
       setError("La réservation a échoué, réessayez dans un instant.");
       return;
@@ -44,9 +47,11 @@ export default function ReservationForm({ book, onClose }: ReservationFormProps)
   }
 
   return (
-    <div className={styles.overlay}>
+    <div className={styles.overlay} role="dialog" aria-modal="true" aria-labelledby="reservation-title">
       <div className={styles.panel}>
-        <h2 className={styles.title}>Réserver « {book.title} »</h2>
+        <h2 id="reservation-title" className={styles.title}>
+          Réserver « {book.title} »
+        </h2>
         <p className={styles.author}>{book.author}</p>
 
         {isSent ? (
@@ -69,15 +74,29 @@ export default function ReservationForm({ book, onClose }: ReservationFormProps)
           >
             <label className={styles.field}>
               Nom
-              <input value={customerName} onChange={(event) => setCustomerName(event.target.value)} />
+              <input
+                value={customerName}
+                onChange={(event) => setCustomerName(event.target.value)}
+                autoComplete="name"
+              />
             </label>
             <label className={styles.field}>
               Téléphone
-              <input type="tel" value={phone} onChange={(event) => setPhone(event.target.value)} />
+              <input
+                type="tel"
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
+                autoComplete="tel"
+              />
             </label>
             <label className={styles.field}>
               Email (facultatif)
-              <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
+              <input
+                type="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                autoComplete="email"
+              />
             </label>
 
             {error && <p className={styles.error}>{error}</p>}
@@ -86,8 +105,8 @@ export default function ReservationForm({ book, onClose }: ReservationFormProps)
               <button type="button" className={styles.secondary} onClick={onClose}>
                 Annuler
               </button>
-              <button type="submit" className={styles.primary}>
-                Réserver
+              <button type="submit" className={styles.primary} disabled={isSending}>
+                {isSending ? "Envoi…" : "Réserver"}
               </button>
             </div>
           </form>
