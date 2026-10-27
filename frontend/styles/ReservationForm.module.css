@@ -1,0 +1,73 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(42, 41, 36, 0.6);
+}
+
+.panel {
+  width: 100%;
+  max-width: 420px;
+  padding: 2rem;
+  border-radius: 8px;
+  background: var(--cream);
+}
+
+.title {
+  font-size: 1.8rem;
+}
+
+.author {
+  color: var(--olive);
+  margin-bottom: 1.5rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.field input {
+  padding: 0.6rem;
+  border: 1px solid var(--olive);
+  border-radius: 4px;
+  font: inherit;
+}
+
+.error {
+  color: var(--burgundy);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+}
+
+.primary,
+.secondary {
+  padding: 0.6rem 1.2rem;
+  border: 1px solid var(--olive);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.primary {
+  background: var(--olive);
+  color: var(--cream);
+}
+
+.secondary {
+  background: none;
+  color: var(--olive);
+}

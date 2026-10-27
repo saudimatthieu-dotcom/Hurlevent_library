@@ -23,3 +23,19 @@
   font-style: italic;
   color: var(--burgundy);
 }
+
+.reserveButton {
+  align-self: flex-start;
+  margin-top: 0.4rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--olive);
+  border-radius: 999px;
+  background: none;
+  color: var(--olive);
+  cursor: pointer;
+}
+
+.reserveButton:hover {
+  background: var(--olive);
+  color: var(--cream);
+}

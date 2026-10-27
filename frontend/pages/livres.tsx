@@ -1,9 +1,11 @@
 import Head from "next/head";
 import { useState } from "react";
 import BookCard from "@/components/BookCard";
+import ReservationForm from "@/components/ReservationForm";
 import type { Book } from "@/types/Book";
 import styles from "@/styles/Books.module.css";
 import { catalog } from "@/data/books";
+import { API_URL } from "@/utils/api";
 
 const categories = [...new Set(catalog.map((book) => book.category))];
 
@@ -11,6 +13,7 @@ export default function BooksPage() {
   const [query, setQuery] = useState("");
   const [books, setBooks] = useState<Book[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
   async function handleSearch() {
     if (query.trim() === "") {
@@ -19,7 +22,7 @@ export default function BooksPage() {
 
     setError(null);
     const response = await fetch(
-      `http://localhost:4000/books/search?q=${encodeURIComponent(query)}`
+      `${API_URL}/books/search?q=${encodeURIComponent(query)}`
     );
     const data = await response.json();
 
@@ -63,7 +66,7 @@ export default function BooksPage() {
 
         <div>
           {books.map((book) => (
-            <BookCard key={book.isbn} book={book} />
+            <BookCard key={book.isbn} book={book} onReserve={setSelectedBook} />
           ))}
         </div>
 
@@ -74,11 +77,15 @@ export default function BooksPage() {
               {catalog
                 .filter((book) => book.category === category)
                 .map((book) => (
-                  <BookCard key={book.isbn} book={book} />
+                  <BookCard key={book.isbn} book={book} onReserve={setSelectedBook} />
                 ))}
             </div>
           </div>
         ))}
+
+        {selectedBook && (
+          <ReservationForm book={selectedBook} onClose={() => setSelectedBook(null)} />
+        )}
       </section>
     </>
   );
