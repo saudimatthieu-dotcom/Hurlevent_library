@@ -1,0 +1,107 @@
+.signIn {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 360px;
+  margin: 4rem auto;
+  padding: 0 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.field input {
+  padding: 0.6rem;
+  border: 1px solid var(--olive);
+  border-radius: 4px;
+  font: inherit;
+}
+
+.error {
+  color: var(--burgundy);
+}
+
+.primary,
+.secondary {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--olive);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.primary {
+  background: var(--olive);
+  color: var(--cream);
+}
+
+.secondary {
+  background: none;
+  color: var(--olive);
+}
+
+.panel {
+  padding: 3rem 2rem;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem;
+  border: 1px solid rgba(42, 41, 36, 0.15);
+  border-radius: 8px;
+}
+
+.bookTitle {
+  font-size: 1.5rem;
+}
+
+.muted {
+  color: var(--olive);
+  font-size: 0.9rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.status {
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--cream);
+}
+
+.pending {
+  background: var(--burgundy);
+}
+
+.ready {
+  background: var(--olive);
+}
+
+.collected,
+.cancelled {
+  background: rgba(42, 41, 36, 0.45);
+}
