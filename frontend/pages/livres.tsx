@@ -2,6 +2,10 @@ import Head from "next/head";
 import { useState } from "react";
 import BookCard from "@/components/BookCard";
 import type { Book } from "@/types/Book";
+import styles from "@/styles/Books.module.css";
+import { catalog } from "@/data/books";
+
+const categories = [...new Set(catalog.map((book) => book.category))];
 
 export default function BooksPage() {
   const [query, setQuery] = useState("");
@@ -62,6 +66,19 @@ export default function BooksPage() {
             <BookCard key={book.isbn} book={book} />
           ))}
         </div>
+
+        {categories.map((category) => (
+          <div key={category} className={styles.category}>
+            <h2 className={styles.categoryTitle}>{category}</h2>
+            <div className={styles.grid}>
+              {catalog
+                .filter((book) => book.category === category)
+                .map((book) => (
+                  <BookCard key={book.isbn} book={book} />
+                ))}
+            </div>
+          </div>
+        ))}
       </section>
     </>
   );

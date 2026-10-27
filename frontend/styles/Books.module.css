@@ -1,0 +1,14 @@
+.category {
+  margin-top: 3rem;
+}
+
+.categoryTitle {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 2rem;
+}

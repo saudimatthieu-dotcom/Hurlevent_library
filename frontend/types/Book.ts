@@ -4,3 +4,7 @@ export type Book = {
   author: string;
   note?: string; // the bookseller's comment (optional)
 };
+
+export type CatalogBook = Book & {
+  category: string;
+};
