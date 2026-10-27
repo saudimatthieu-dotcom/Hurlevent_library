@@ -1,4 +1,5 @@
 import "dotenv/config";
+import "./models/connection";
 import express from "express";
 import cors from "cors";
 import booksRouter from "./routes/books";
