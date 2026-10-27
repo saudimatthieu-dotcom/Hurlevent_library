@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import booksRouter from "./routes/books";
 import reservationsRouter from "./routes/reservations";
+import adminsRouter from "./routes/admins";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.get("/", (req, res) => {
 
 app.use("/books", booksRouter);
 app.use("/reservations", reservationsRouter);
+app.use("/admins", adminsRouter);
 
 const port = process.env.PORT ?? 4000;
 app.listen(port, () => {
