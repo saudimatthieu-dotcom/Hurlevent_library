@@ -7,8 +7,8 @@ export default function Header() {
       <Link href="/" className={styles.logo}>
         hurlevent
       </Link>
-      <Link href="/commander" className={styles.orderButton}>
-        Commander un livre
+      <Link href="/livres" className={styles.orderButton}>
+        Parcourir les livres
       </Link>
     </header>
   );
