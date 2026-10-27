@@ -1,8 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Hurlevent API: book search and click & collect reservations",
   "scripts": {
     "dev": "tsx watch app.ts",
     "build": "tsc",
