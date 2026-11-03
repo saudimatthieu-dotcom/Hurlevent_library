@@ -4,7 +4,7 @@ import type { AdminTabProps } from "@/types/AdminTabProps";
 import type { ShopEvent } from "@/types/ShopEvent";
 import { apiRequest, NETWORK_ERROR } from "@/utils/api";
 
-type EventForm = Omit<ShopEvent, "_id">;
+type EventForm = Omit<ShopEvent, "id">;
 
 const EMPTY_FORM: EventForm = { title: "", date: "", time: "", description: "" };
 
@@ -15,7 +15,7 @@ function sortByDateDesc(events: ShopEvent[]): ShopEvent[] {
 export default function AdminEvents({ token, onUnauthorized }: AdminTabProps) {
   const [events, setEvents] = useState<ShopEvent[]>([]);
   const [form, setForm] = useState<EventForm>(EMPTY_FORM);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function AdminEvents({ token, onUnauthorized }: AdminTabProps) {
   }
 
   function startEditing(event: ShopEvent) {
-    setEditingId(event._id);
+    setEditingId(event.id);
     setForm({ title: event.title, date: event.date, time: event.time, description: event.description });
     setError(null);
   }
@@ -66,7 +66,7 @@ export default function AdminEvents({ token, onUnauthorized }: AdminTabProps) {
       return;
     }
 
-    const others = events.filter((event) => event._id !== data.event._id);
+    const others = events.filter((event) => event.id !== data.event.id);
     setEvents(sortByDateDesc([...others, data.event]));
     setError(null);
     resetForm();
@@ -76,7 +76,7 @@ export default function AdminEvents({ token, onUnauthorized }: AdminTabProps) {
     if (!window.confirm(`Supprimer « ${event.title} » ?`)) {
       return;
     }
-    const data = await apiRequest(`/events/${event._id}`, "DELETE", { token });
+    const data = await apiRequest(`/events/${event.id}`, "DELETE", { token });
     if (!data) {
       setError(NETWORK_ERROR);
       return;
@@ -85,8 +85,8 @@ export default function AdminEvents({ token, onUnauthorized }: AdminTabProps) {
       onUnauthorized();
       return;
     }
-    setEvents(events.filter((item) => item._id !== event._id));
-    if (editingId === event._id) {
+    setEvents(events.filter((item) => item.id !== event.id));
+    if (editingId === event.id) {
       resetForm();
     }
   }
@@ -144,7 +144,7 @@ export default function AdminEvents({ token, onUnauthorized }: AdminTabProps) {
 
       <ul className={styles.list}>
         {events.map((event) => (
-          <li key={event._id} className={styles.item}>
+          <li key={event.id} className={styles.item}>
             <div>
               <h3 className={styles.bookTitle}>{event.title}</h3>
               <p className={styles.muted}>

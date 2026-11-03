@@ -45,7 +45,7 @@ export default function Events({ events }: EventsProps) {
 
       <ul className={styles.list}>
         {upcomingEvents.map((event) => (
-          <li key={event._id} className={styles.card}>
+          <li key={event.id} className={styles.card}>
             <p className={styles.date}>
               {formatDate(event.date)} · {event.time}
             </p>
@@ -69,7 +69,7 @@ export default function Events({ events }: EventsProps) {
       {showPast && (
         <ul className={`${styles.list} ${styles.past}`}>
           {pastEvents.map((event) => (
-            <li key={event._id} className={styles.card}>
+            <li key={event.id} className={styles.card}>
               <p className={styles.date}>
                 {formatDate(event.date)} · {event.time}
               </p>
