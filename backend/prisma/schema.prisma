@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String
+  date        String // "YYYY-MM-DD", kept as text so no timezone shifts the day
+  time        String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
