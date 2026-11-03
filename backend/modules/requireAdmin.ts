@@ -18,3 +18,13 @@ export const requireValidId: RequestHandler = (req, res, next) => {
   }
   next();
 };
+
+// Postgres ids are whole numbers (1, 2, 3…), not Mongo ObjectIds
+export const requireIntId: RequestHandler = (req, res, next) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) {
+    res.status(400).json({ result: false, error: "Invalid id" });
+    return;
+  }
+  next();
+};
