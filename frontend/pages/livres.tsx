@@ -141,7 +141,8 @@ export default function BooksPage({ catalog }: BooksPageProps) {
               {catalog
                 .filter((book) => book.category === category)
                 .map((book) => (
-                  <BookCard key={book._id} book={book} onReserve={setSelectedBook} />
+                  // Mongo: key={book._id}
+                  <BookCard key={book.id} book={book} onReserve={setSelectedBook} />
                 ))}
             </div>
           </div>

@@ -61,7 +61,8 @@ export default function AdminCatalog({ token, onUnauthorized }: AdminTabProps) {
     if (!window.confirm(`Retirer « ${book.title} » du catalogue ?`)) {
       return;
     }
-    const data = await apiRequest(`/catalog/${book._id}`, "DELETE", { token });
+    // Mongo: `/catalog/${book._id}`
+    const data = await apiRequest(`/catalog/${book.id}`, "DELETE", { token });
     if (!data) {
       setError(NETWORK_ERROR);
       return;
@@ -70,7 +71,8 @@ export default function AdminCatalog({ token, onUnauthorized }: AdminTabProps) {
       onUnauthorized();
       return;
     }
-    setBooks(books.filter((item) => item._id !== book._id));
+    // Mongo: item._id !== book._id
+    setBooks(books.filter((item) => item.id !== book.id));
   }
 
   return (
@@ -118,7 +120,8 @@ export default function AdminCatalog({ token, onUnauthorized }: AdminTabProps) {
             {books
               .filter((book) => book.category === item)
               .map((book) => (
-                <li key={book._id} className={styles.item}>
+                // Mongo: key={book._id}
+                <li key={book.id} className={styles.item}>
                   <span>
                     <strong>{book.title}</strong> · {book.author}
                   </span>

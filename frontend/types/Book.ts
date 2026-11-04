@@ -13,8 +13,8 @@ export type Pick = Book & {
   id: number;
 };
 
-// Still on MongoDB until the catalog is moved to Postgres
 export type CatalogBook = Book & {
-  _id: string;
+  // Mongo: _id: string;
+  id: number;
   category: string;
 };
