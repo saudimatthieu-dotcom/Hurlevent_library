@@ -8,7 +8,8 @@ import { apiRequest, NETWORK_ERROR } from "@/utils/api";
 type PickRowProps = AdminTabProps & {
   pick: Pick;
   onSaved: (pick: Pick) => void;
-  onRemoved: (id: string) => void;
+  // Mongo: onRemoved: (id: string) => void;
+  onRemoved: (id: number) => void;
 };
 
 function PickRow({ pick, token, onUnauthorized, onSaved, onRemoved }: PickRowProps) {
@@ -16,7 +17,8 @@ function PickRow({ pick, token, onUnauthorized, onSaved, onRemoved }: PickRowPro
   const [message, setMessage] = useState<string | null>(null);
 
   async function saveNote() {
-    const data = await apiRequest<{ pick: Pick }>(`/picks/${pick._id}`, "PUT", { token, note });
+    // Mongo: `/picks/${pick._id}`
+    const data = await apiRequest<{ pick: Pick }>(`/picks/${pick.id}`, "PUT", { token, note });
     if (!data) {
       setMessage(NETWORK_ERROR);
       return;
@@ -33,7 +35,8 @@ function PickRow({ pick, token, onUnauthorized, onSaved, onRemoved }: PickRowPro
     if (!window.confirm(`Retirer « ${pick.title} » des coups de cœur ?`)) {
       return;
     }
-    const data = await apiRequest(`/picks/${pick._id}`, "DELETE", { token });
+    // Mongo: `/picks/${pick._id}`
+    const data = await apiRequest(`/picks/${pick.id}`, "DELETE", { token });
     if (!data) {
       setMessage(NETWORK_ERROR);
       return;
@@ -42,7 +45,8 @@ function PickRow({ pick, token, onUnauthorized, onSaved, onRemoved }: PickRowPro
       onUnauthorized();
       return;
     }
-    onRemoved(pick._id);
+    // Mongo: onRemoved(pick._id);
+    onRemoved(pick.id);
   }
 
   return (
@@ -137,14 +141,15 @@ export default function AdminPicks({ token, onUnauthorized }: AdminTabProps) {
 
       {picks.length === 0 && <p>Aucun coup de cœur pour le moment.</p>}
       <ul className={styles.list}>
+        {/* Mongo: key, onSaved and onRemoved compared pick._id */}
         {picks.map((pick) => (
           <PickRow
-            key={pick._id}
+            key={pick.id}
             pick={pick}
             token={token}
             onUnauthorized={onUnauthorized}
-            onSaved={(saved) => setPicks(picks.map((item) => (item._id === saved._id ? saved : item)))}
-            onRemoved={(id) => setPicks(picks.filter((item) => item._id !== id))}
+            onSaved={(saved) => setPicks(picks.map((item) => (item.id === saved.id ? saved : item)))}
+            onRemoved={(id) => setPicks(picks.filter((item) => item.id !== id))}
           />
         ))}
       </ul>

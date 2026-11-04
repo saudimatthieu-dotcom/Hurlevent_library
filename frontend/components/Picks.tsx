@@ -15,8 +15,9 @@ export default function Picks({ picks }: PicksProps) {
     <section className={styles.picks}>
       <h2 className={styles.title}>Nos coups de cœur</h2>
       <div className={styles.grid}>
+        {/* Mongo: key={book._id} */}
         {picks.map((book) => (
-          <BookCard key={book._id} book={book} />
+          <BookCard key={book.id} book={book} />
         ))}
       </div>
     </section>
