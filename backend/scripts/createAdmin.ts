@@ -1,8 +1,9 @@
 import "dotenv/config";
-import mongoose from "mongoose";
+// Mongo: import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import uid2 from "uid2";
-import Admin from "../models/admins";
+// Mongo: import Admin from "../models/admins";
+import prisma from "../models/prisma";
 
 async function createAdmin() {
   const [email, password] = process.argv.slice(2);
@@ -12,17 +13,24 @@ async function createAdmin() {
     return;
   }
 
-  await mongoose.connect(process.env.CONNECTION_STRING ?? "");
+  // Mongo: await mongoose.connect(process.env.CONNECTION_STRING ?? "");
+  // Prisma connects by itself on the first query
 
-  const existing = await Admin.findOne({ email: email.toLowerCase() });
+  // Mongoose lowercased and trimmed the email (lowercase: true, trim: true), Prisma doesn't
+  const cleanEmail = email.toLowerCase().trim();
+
+  // Mongo: const existing = await Admin.findOne({ email: email.toLowerCase() });
+  const existing = await prisma.admin.findUnique({ where: { email: cleanEmail } });
   if (existing) {
     console.log("An admin with this email already exists");
   } else {
-    await new Admin({ email, password: bcrypt.hashSync(password, 10), token: uid2(32) }).save();
-    console.log(`Admin created: ${email}`);
+    // Mongo: await new Admin({ email, password: bcrypt.hashSync(password, 10), token: uid2(32) }).save();
+    await prisma.admin.create({ data: { email: cleanEmail, password: bcrypt.hashSync(password, 10), token: uid2(32) } });
+    console.log(`Admin created: ${cleanEmail}`);
   }
 
-  await mongoose.disconnect();
+  // Mongo: await mongoose.disconnect();
+  await prisma.$disconnect();
 }
 
 createAdmin();

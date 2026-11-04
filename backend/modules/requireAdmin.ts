@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import mongoose from "mongoose";
+// Mongo: import mongoose from "mongoose";
 import { findAdmin } from "./findAdmin";
 
 export const requireAdmin: RequestHandler = async (req, res, next) => {
@@ -11,13 +11,13 @@ export const requireAdmin: RequestHandler = async (req, res, next) => {
   next();
 };
 
-export const requireValidId: RequestHandler = (req, res, next) => {
-  if (!mongoose.isValidObjectId(req.params.id)) {
-    res.status(400).json({ result: false, error: "Invalid id" });
-    return;
-  }
-  next();
-};
+// Mongo: export const requireValidId: RequestHandler = (req, res, next) => {
+// Mongo:   if (!mongoose.isValidObjectId(req.params.id)) {
+// Mongo:     res.status(400).json({ result: false, error: "Invalid id" });
+// Mongo:     return;
+// Mongo:   }
+// Mongo:   next();
+// Mongo: };
 
 // Postgres ids are whole numbers (1, 2, 3…), not Mongo ObjectIds
 export const requireIntId: RequestHandler = (req, res, next) => {

@@ -41,3 +41,33 @@ model CatalogBook {
   // The /livres page sorts by category on every visit
   @@index([category])
 }
+
+// Mongo: status: { type: String, enum: ["pending", "ready", "collected", "cancelled"] }
+// A Postgres enum is a real type: the database itself refuses any other value
+enum ReservationStatus {
+  pending
+  ready
+  collected
+  cancelled
+}
+
+model Reservation {
+  id           Int               @id @default(autoincrement())
+  isbn         String
+  title        String
+  author       String
+  customerName String
+  phone        String
+  email        String?
+  status       ReservationStatus @default(pending)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+}
+
+model Admin {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  // Mongo: token had no index. @unique gives it one, and findUnique({ where: { token } }) needs it
+  token    String @unique
+}

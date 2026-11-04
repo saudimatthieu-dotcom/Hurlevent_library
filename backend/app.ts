@@ -1,5 +1,5 @@
 import "dotenv/config";
-import "./models/connection";
+// Mongo: import "./models/connection";   (Prisma connects by itself on the first query, see models/prisma.ts)
 import express, { type ErrorRequestHandler } from "express";
 import cors from "cors";
 import { rateLimit } from "express-rate-limit";

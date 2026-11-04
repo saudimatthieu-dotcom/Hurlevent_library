@@ -1,6 +1,7 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
-import Admin from "../models/admins";
+// Mongo: import Admin from "../models/admins";
+import prisma from "../models/prisma";
 
 const router = Router();
 
@@ -12,7 +13,8 @@ router.post("/signin", async (req, res) => {
     return;
   }
 
-  const admin = await Admin.findOne({ email: email.toLowerCase().trim() });
+  // Mongo: const admin = await Admin.findOne({ email: email.toLowerCase().trim() });
+  const admin = await prisma.admin.findUnique({ where: { email: email.toLowerCase().trim() } });
 
   if (!admin || !bcrypt.compareSync(password, admin.password)) {
     res.status(401).json({ result: false, error: "Wrong email or password" });

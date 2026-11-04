@@ -1,11 +1,12 @@
 import "dotenv/config";
-import mongoose from "mongoose";
-import Event from "../models/events";
-import Pick from "../models/picks";
-import CatalogBook from "../models/catalogBooks";
+// Mongo: import mongoose from "mongoose";
+// Mongo: import Event from "../models/events";
+// Mongo: import Pick from "../models/picks";
+// Mongo: import CatalogBook from "../models/catalogBooks";
+import prisma from "../models/prisma";
 
 // Test content (ISBNs checked on Open Library), until the booksellers add the real one from /admin.
-// Each collection is only filled when it is empty, so running this twice never duplicates or erases anything.
+// Each table is only filled when it is empty, so running this twice never duplicates or erases anything.
 
 const events = [
   {
@@ -46,21 +47,39 @@ const catalog = [
   { isbn: "9782070323517", title: "Le Deuxième Sexe I", author: "Simone de Beauvoir", category: "Essais" },
 ];
 
-async function fillIfEmpty(name: string, model: mongoose.Model<any>, documents: object[]) {
-  if ((await model.countDocuments()) > 0) {
-    console.log(`${name}: already has content, skipped`);
-    return;
-  }
-  await model.insertMany(documents);
-  console.log(`${name}: ${documents.length} added`);
+// Mongo: async function fillIfEmpty(name: string, model: mongoose.Model<any>, documents: object[]) {
+// Mongo:   if ((await model.countDocuments()) > 0) { ...skipped }
+// Mongo:   await model.insertMany(documents);
+// Mongo: }
+// Each Prisma model has its own types, so instead of one generic helper there are three short blocks
+// (count = countDocuments, createMany = insertMany)
+function report(name: string, added: number | null) {
+  console.log(added === null ? `${name}: already has content, skipped` : `${name}: ${added} added`);
 }
 
 async function seed() {
-  await mongoose.connect(process.env.CONNECTION_STRING ?? "");
-  await fillIfEmpty("events", Event, events);
-  await fillIfEmpty("picks", Pick, picks);
-  await fillIfEmpty("catalog", CatalogBook, catalog);
-  await mongoose.disconnect();
+  // Mongo: await mongoose.connect(process.env.CONNECTION_STRING ?? "");
+
+  if ((await prisma.event.count()) > 0) {
+    report("events", null);
+  } else {
+    report("events", (await prisma.event.createMany({ data: events })).count);
+  }
+
+  if ((await prisma.pick.count()) > 0) {
+    report("picks", null);
+  } else {
+    report("picks", (await prisma.pick.createMany({ data: picks })).count);
+  }
+
+  if ((await prisma.catalogBook.count()) > 0) {
+    report("catalog", null);
+  } else {
+    report("catalog", (await prisma.catalogBook.createMany({ data: catalog })).count);
+  }
+
+  // Mongo: await mongoose.disconnect();
+  await prisma.$disconnect();
 }
 
 seed();

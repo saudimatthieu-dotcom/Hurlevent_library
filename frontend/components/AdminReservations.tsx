@@ -40,7 +40,8 @@ export default function AdminReservations({ token, onUnauthorized }: AdminTabPro
     });
   }, [token, onUnauthorized]);
 
-  async function updateStatus(id: string, status: ReservationStatus) {
+  // Mongo: async function updateStatus(id: string, status: ReservationStatus) {
+  async function updateStatus(id: number, status: ReservationStatus) {
     const data = await apiRequest<{ reservation: Reservation }>(`/reservations/${id}/status`, "PUT", { token, status });
     if (!data) {
       setError(NETWORK_ERROR);
@@ -51,8 +52,9 @@ export default function AdminReservations({ token, onUnauthorized }: AdminTabPro
       return;
     }
     setError(null);
+    // Mongo: reservation._id === id
     setReservations((current) =>
-      (current ?? []).map((reservation) => (reservation._id === id ? data.reservation : reservation))
+      (current ?? []).map((reservation) => (reservation.id === id ? data.reservation : reservation))
     );
   }
 
@@ -68,8 +70,9 @@ export default function AdminReservations({ token, onUnauthorized }: AdminTabPro
 
   return (
     <ul className={styles.list}>
+      {/* Mongo: key={reservation._id} and updateStatus(reservation._id, …) */}
       {reservations.map((reservation) => (
-        <li key={reservation._id} className={styles.item}>
+        <li key={reservation.id} className={styles.item}>
           <div>
             <h2 className={styles.bookTitle}>{reservation.title}</h2>
             <p className={styles.muted}>
@@ -97,7 +100,7 @@ export default function AdminReservations({ token, onUnauthorized }: AdminTabPro
               <button
                 key={action.status}
                 className={styles.secondary}
-                onClick={() => updateStatus(reservation._id, action.status)}
+                onClick={() => updateStatus(reservation.id, action.status)}
               >
                 {action.label}
               </button>

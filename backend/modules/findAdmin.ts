@@ -1,8 +1,10 @@
-import Admin from "../models/admins";
+// Mongo: import Admin from "../models/admins";
+import prisma from "../models/prisma";
 
 export async function findAdmin(token: unknown) {
   if (typeof token !== "string" || token === "") {
     return null;
   }
-  return Admin.findOne({ token });
+  // Mongo: return Admin.findOne({ token });
+  return prisma.admin.findUnique({ where: { token } });
 }
