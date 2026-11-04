@@ -60,8 +60,10 @@ export default function AdminEvents({ token, onUnauthorized }: AdminTabProps) {
     if (!data.result) {
       if (data.error === "Not authorized") {
         onUnauthorized();
-      } else {
+      } else if (data.error === "Missing or invalid fields") {
         setError("L’enregistrement a échoué. Vérifiez la date.");
+      } else {
+        setError("Erreur du serveur, réessayez dans un instant.");
       }
       return;
     }
