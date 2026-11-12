@@ -1,5 +1,7 @@
 # Librairie Hurlevent
 
+![CI](https://github.com/saudimatthieu-dotcom/Hurlevent_library/actions/workflows/ci.yml/badge.svg)
+²
 Website for Hurlevent, an independent bookshop at 238 rue de Belleville, Paris 20e.
 
 Customers can see the shop's events and picks, browse books by category, and reserve a book online to collect and pay for in the shop (click & collect, no online payment). The booksellers manage everything from a private admin area.
@@ -22,7 +24,7 @@ Customers can see the shop's events and picks, browse books by category, and res
 ## Stack
 
 - **Frontend:** Next.js (pages router), React, TypeScript, CSS Modules
-- **Backend:** Express, TypeScript, MongoDB (Mongoose), bcrypt + uid2 tokens, express-rate-limit
+- **Backend:** Express, TypeScript, PostgreSQL with Prisma, bcrypt + uid2 tokens, express-rate-limit
 - **External API:** Google Books (book search, proxied by the backend so the API key stays private), Open Library (covers)
 
 ## Structure
@@ -38,9 +40,10 @@ hurlevent/
 │   └── utils/         helpers (opening status, API calls)
 └── backend/           Express API
     ├── routes/        books, reservations, admins, events, picks, catalog
-    ├── models/        Mongoose connection and schemas
+    ├── prisma/        schema and migrations
+    ├── models/        Prisma client
     ├── modules/       validation and admin check
-    ├── scripts/       createAdmin, seed
+    ├── scripts/       createAdmin, seed, copyFromMongo (one-off migration)
     └── types/         TypeScript types
 ```
 
@@ -53,7 +56,8 @@ Node version is set in `.nvmrc` (run `nvm use`).
 ```bash
 cd backend
 npm install
-cp .env.example .env                              # then fill in the values
+cp .env.example .env                              # then fill in the values (DATABASE_URL = your PostgreSQL)
+npx prisma migrate deploy                         # create the tables
 npx tsx scripts/createAdmin.ts EMAIL PASSWORD     # a bookseller account (10+ characters)
 npx tsx scripts/seed.ts                           # optional: demo events, picks and catalogue
 npm run dev                                       # http://localhost:4000
@@ -95,6 +99,6 @@ Sign-in and reservations are limited to 10 requests per 15 minutes per IP, searc
 
 ## Deployment
 
-**Backend** (e.g. Render): root directory `backend`, build command `npm install --include=dev && npm run build`, start command `npm start`. Environment: `CONNECTION_STRING`, `GOOGLE_BOOKS_API_KEY`, `FRONTEND_URL` (the site's address, so only it can call the API). In MongoDB Atlas, allow the host's IP addresses.
+**Backend** (e.g. Render): root directory `backend`, build command `npm install --include=dev && npm run build`, start command `npx prisma migrate deploy && npm start`. Environment: `DATABASE_URL` (a hosted PostgreSQL), `GOOGLE_BOOKS_API_KEY`, `FRONTEND_URL` (the site's address, so only it can call the API).
 
 **Frontend** (e.g. Vercel): root directory `frontend`. Environment: `NEXT_PUBLIC_API_URL` (the backend's address).
