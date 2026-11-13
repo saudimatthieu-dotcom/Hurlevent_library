@@ -72,6 +72,15 @@ cp .env.example .env.local
 npm run dev                                       # http://localhost:3000
 ```
 
+**Backend and database with Docker**
+
+```bash
+cp backend/.env.example backend/.env             # then fill in the values (DATABASE_URL is set by compose)
+docker compose up --build                         # or: podman-compose up --build
+```
+
+PostgreSQL 17 starts first, the migrations are applied, then the API answers on http://localhost:4000. The database is also published on port 5433 of your machine, and its data stays in the `pgdata` volume.
+
 ## API
 
 Routes marked 🔒 need an admin token (in the URL for `GET`, in the JSON body otherwise).
