@@ -9,6 +9,7 @@ import adminsRouter from "./routes/admins";
 import eventsRouter from "./routes/events";
 import picksRouter from "./routes/picks";
 import catalogRouter from "./routes/catalog";
+import assistantRouter from "./routes/assistant"
 
 const app = express();
 
@@ -30,6 +31,7 @@ function limiter(limit: number, windowMinutes: number) {
 
 app.post("/admins/signin", limiter(10, 15));
 app.post("/reservations", limiter(10, 15));
+app.post("/assistant", limiter(15, 15));
 app.get("/books/search", limiter(60, 1));
 
 app.get("/", (req, res) => {
@@ -42,6 +44,7 @@ app.use("/admins", adminsRouter);
 app.use("/events", eventsRouter);
 app.use("/picks", picksRouter);
 app.use("/catalog", catalogRouter);
+app.use("/assistant", assistantRouter);
 
 app.use((req, res) => {
   res.status(404).json({ result: false, error: "Route not found" });
