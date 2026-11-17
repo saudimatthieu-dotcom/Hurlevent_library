@@ -1,7 +1,7 @@
 # Librairie Hurlevent
 
 ![CI](https://github.com/saudimatthieu-dotcom/Hurlevent_library/actions/workflows/ci.yml/badge.svg)
-²
+
 Website for Hurlevent, an independent bookshop at 238 rue de Belleville, Paris 20e.
 
 Customers can see the shop's events and picks, browse books by category, and reserve a book online to collect and pay for in the shop (click & collect, no online payment). The booksellers manage everything from a private admin area.
@@ -13,6 +13,7 @@ Customers can see the shop's events and picks, browse books by category, and res
 - Home page: live "open / closed" status, upcoming events, the booksellers' picks, opening hours
 - Book catalogue by category, plus a search across French-language books
 - Online reservation (name, phone, optional email), paid on collection
+- An AI assistant (API) that helps find a book: it searches the shop's own catalogue, picks and events, and never invents a title
 
 **For the booksellers** (`/admin`, sign-in required)
 
@@ -25,7 +26,8 @@ Customers can see the shop's events and picks, browse books by category, and res
 
 - **Frontend:** Next.js (pages router), React, TypeScript, CSS Modules
 - **Backend:** Express, TypeScript, PostgreSQL with Prisma, bcrypt + uid2 tokens, express-rate-limit
-- **External API:** Google Books (book search, proxied by the backend so the API key stays private), Open Library (covers)
+- **Tests:** Jest (with `@swc/jest`), the AI model client mocked
+- **External API:** Google Books (book search, proxied by the backend so the API key stays private), Open Library (covers), Groq (language model for the assistant)
 
 ## Structure
 
@@ -39,11 +41,11 @@ hurlevent/
 │   ├── types/         TypeScript types
 │   └── utils/         helpers (opening status, API calls)
 └── backend/           Express API
-    ├── routes/        books, reservations, admins, events, picks, catalog
+    ├── routes/        books, reservations, admins, events, picks, catalog, assistant
     ├── prisma/        schema and migrations
     ├── models/        Prisma client
-    ├── modules/       validation and admin check
-    ├── scripts/       createAdmin, seed, copyFromMongo (one-off migration)
+    ├── modules/       validation, admin check, AI assistant (agent loop, tools) and its tests
+    ├── scripts/       createAdmin, seed, askAssistant (try the assistant), copyFromMongo (one-off migration)
     └── types/         TypeScript types
 ```
 
@@ -103,11 +105,37 @@ Routes marked 🔒 need an admin token (in the URL for `GET`, in the JSON body o
 | GET    | `/catalog`                     | List the catalogue |
 | POST   | `/catalog` 🔒                  | Add a book to the catalogue |
 | DELETE | `/catalog/:id` 🔒              | Remove a book from the catalogue |
+| POST   | `/assistant`                   | Ask the assistant a question (`{ "message": "..." }`, 1 to 500 characters) |
 
-Sign-in and reservations are limited to 10 requests per 15 minutes per IP, search to 60 per minute.
+Sign-in and reservations are limited to 10 requests per 15 minutes per IP, search to 60 per minute, the assistant to 15 questions per 15 minutes.
+
+## AI assistant
+
+The assistant answers customers' questions about books, picks and events. It uses tool calling with the Groq API (`groq-sdk`), and the agent loop is written by hand, with no framework.
+
+How it works:
+
+1. The customer's message goes to the model with three read-only tools: `search_catalog`, `list_picks` and `list_upcoming_events`.
+2. When the model asks for a tool, the backend validates the arguments with zod, runs the Prisma query, and sends the result back.
+3. This repeats until the model gives its answer, with a maximum of 5 iterations. If the limit is hit, or the answer is cut off, a polite fallback message is returned.
+4. The system prompt tells the model to recommend only books returned by the tools, and to say so when nothing matches.
+
+Setup: put `GROQ_API_KEY` in `backend/.env` (never commit it). `GROQ_MODEL` is optional and defaults to `openai/gpt-oss-120b`.
+
+Try it from the terminal:
+
+```bash
+npx tsx scripts/askAssistant.ts "Je cherche un polar"
+```
+
+Tests (Jest, with the model client mocked, so no API key or database is needed):
+
+```bash
+npm test
+```
 
 ## Deployment
 
-**Backend** (e.g. Render): root directory `backend`, build command `npm install --include=dev && npm run build`, start command `npx prisma migrate deploy && npm start`. Environment: `DATABASE_URL` (a hosted PostgreSQL), `GOOGLE_BOOKS_API_KEY`, `FRONTEND_URL` (the site's address, so only it can call the API).
+**Backend** (e.g. Render): root directory `backend`, build command `npm install --include=dev && npm run build`, start command `npx prisma migrate deploy && npm start`. Environment: `DATABASE_URL` (a hosted PostgreSQL), `GOOGLE_BOOKS_API_KEY`, `GROQ_API_KEY` (the assistant), `FRONTEND_URL` (the site's address, so only it can call the API).
 
 **Frontend** (e.g. Vercel): root directory `frontend`. Environment: `NEXT_PUBLIC_API_URL` (the backend's address).
