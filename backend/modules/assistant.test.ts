@@ -38,6 +38,7 @@ beforeEach(() => {
   mockExecuteTool.mockReset();
   jest.spyOn(console, "log").mockImplementation(() => {});
   jest.spyOn(console, "error").mockImplementation(() => {});
+  jest.spyOn(console, "warn").mockImplementation(() => {});
 });
 
 describe("askAssistant", () => {
@@ -83,11 +84,24 @@ describe("askAssistant", () => {
     expect(await askAssistant("Salut")).toContain("Désolé");
   });
 
-  it("stops after 5 iterations if the model keeps asking for tools", async () => {
+  it("sends the earlier turns before the new question", async () => {
+    mockCreate.mockResolvedValueOnce(finalAnswer("Voici la différence…"));
+
+    await askAssistant("entre les deux", [
+      { role: "user", content: "un polar" },
+      { role: "assistant", content: "Arsène Lupin et Le Mystère de la chambre jaune" },
+    ]);
+
+    const sent = mockCreate.mock.calls[0][0].messages;
+    expect(sent.map((m: { role: string }) => m.role)).toEqual(["system", "user", "assistant", "user"]);
+    expect(sent.at(-1).content).toBe("entre les deux");
+  });
+
+  it("stops after 6 iterations if the model keeps asking for tools", async () => {
     mockExecuteTool.mockResolvedValue([]);
     mockCreate.mockResolvedValue(toolRequest('{"query":"x"}'));
 
     expect(await askAssistant("Salut")).toContain("Désolé");
-    expect(mockCreate).toHaveBeenCalledTimes(5);
+    expect(mockCreate).toHaveBeenCalledTimes(6);
   });
 });

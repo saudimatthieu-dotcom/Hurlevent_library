@@ -31,17 +31,25 @@ export default function ChatBox() {
       return;
     }
 
+    // The earlier turns (before this question), in the shape the backend expects.
+    // The server accepts at most 10 turns of 2000 characters, so we trim to that here.
+    const history = shown.slice(-10).map((message) => ({
+      role: message.from === "customer" ? "user" : "assistant",
+      content: message.text.slice(0, 2000),
+    }));
+
     setMessages([...shown, { from: "customer", text }]);
     setDraft("");
     setIsSending(true);
 
-    const data = await apiRequest<{ answer: string }>("/assistant", "POST", { message: text });
+    const data = await apiRequest<{ answer: string }>("/assistant", "POST", { message: text, history });
 
     let reply = t.chat.unavailable;
     if (data === null) {
       reply = t.networkError;
     } else if (data.result) {
-      reply = data.answer;
+      // Safety net: the prompt asks for plain text, but the model sometimes still writes *italics* or **bold**
+      reply = data.answer.replace(/\*+/g, "");
     }
 
     setMessages((current) => [...current, { from: "assistant", text: reply }]);

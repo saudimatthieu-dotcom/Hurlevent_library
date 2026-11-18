@@ -5,6 +5,9 @@ export type GoogleBooksVolume = {
     language?: string;
     industryIdentifiers?: { type: string; identifier: string }[];
     imageLinks?: { thumbnail?: string };
+    description?: string;
+    publishedDate?: string;
+    pageCount?: number;
   };
 };
 

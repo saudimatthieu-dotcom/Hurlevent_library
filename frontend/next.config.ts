@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
   i18n: {
     locales: ["fr", "en"],
     defaultLocale: "fr",
+    // Always open in French: no automatic redirect to /en from the browser's language
+    localeDetection: false,
   },
   images: {
     remotePatterns: [
