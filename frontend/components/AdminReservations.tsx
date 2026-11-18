@@ -20,8 +20,9 @@ const NEXT_ACTIONS: Record<ReservationStatus, { status: ReservationStatus; label
     { status: "collected", label: "Marquer retiré" },
     { status: "cancelled", label: "Annuler" },
   ],
-  collected: [],
-  cancelled: [],
+  // Final states keep one "undo" button, so a misclick doesn't need a developer to fix it
+  collected: [{ status: "ready", label: "Annuler le retrait" }],
+  cancelled: [{ status: "pending", label: "Rétablir" }],
 };
 
 export default function AdminReservations({ token, onUnauthorized }: AdminTabProps) {

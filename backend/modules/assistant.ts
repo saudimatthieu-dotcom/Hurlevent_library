@@ -25,7 +25,10 @@ Règles :
 
 
 async function runTool(call: ToolCall): Promise<Message> {
-  console.log(`[tool] ${call.function.name}`, call.function.arguments);
+  // Development only: the arguments contain what customers typed, which shouldn't end up in production logs
+  if (process.env.NODE_ENV !== "production") {
+    console.log(`[tool] ${call.function.name}`, call.function.arguments);
+  }
   try {
     const input = JSON.parse(call.function.arguments || "{}");
     const data = await executeTool(call.function.name, input);
