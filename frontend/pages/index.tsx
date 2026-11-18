@@ -5,6 +5,7 @@ import Home from "@/components/Home";
 import type { ShopEvent } from "@/types/ShopEvent";
 import type { Pick } from "@/types/Book";
 import { apiRequest } from "@/utils/api";
+import { useTranslation } from "@/utils/i18n";
 
 type HomePageProps = {
   events: ShopEvent[];
@@ -26,14 +27,13 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> = async () =>
 };
 
 export default function HomePage({ events, picks }: HomePageProps) {
+  const { t } = useTranslation();
+
   return (
     <>
       <Head>
-        <title>Librairie Hurlevent — Belleville, Paris 20e</title>
-        <meta
-          name="description"
-          content="Librairie indépendante au 238 rue de Belleville, Paris 20e. Rencontres, dédicaces, coups de cœur et réservation en ligne avec retrait en librairie."
-        />
+        <title>{t.home.metaTitle}</title>
+        <meta name="description" content={t.home.metaDescription} />
       </Head>
       <Home events={events} picks={picks} />
     </>

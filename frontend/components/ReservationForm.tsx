@@ -1,7 +1,8 @@
 import { useState } from "react";
 import styles from "@/styles/ReservationForm.module.css";
 import type { Book } from "@/types/Book";
-import { apiRequest, NETWORK_ERROR } from "@/utils/api";
+import { apiRequest } from "@/utils/api";
+import { useTranslation } from "@/utils/i18n";
 
 type ReservationFormProps = {
   book: Book;
@@ -9,6 +10,7 @@ type ReservationFormProps = {
 };
 
 export default function ReservationForm({ book, onClose }: ReservationFormProps) {
+  const { t } = useTranslation();
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -18,7 +20,7 @@ export default function ReservationForm({ book, onClose }: ReservationFormProps)
 
   async function handleSubmit() {
     if (customerName.trim() === "" || phone.trim() === "") {
-      setError("Merci d'indiquer votre nom et votre téléphone.");
+      setError(t.reservation.missingFields);
       return;
     }
 
@@ -35,11 +37,11 @@ export default function ReservationForm({ book, onClose }: ReservationFormProps)
     setIsSending(false);
 
     if (!data) {
-      setError(NETWORK_ERROR);
+      setError(t.networkError);
       return;
     }
     if (!data.result) {
-      setError("La réservation a échoué, réessayez dans un instant.");
+      setError(t.reservation.failed);
       return;
     }
 
@@ -50,18 +52,15 @@ export default function ReservationForm({ book, onClose }: ReservationFormProps)
     <div className={styles.overlay} role="dialog" aria-modal="true" aria-labelledby="reservation-title">
       <div className={styles.panel}>
         <h2 id="reservation-title" className={styles.title}>
-          Réserver « {book.title} »
+          {t.reservation.title(book.title)}
         </h2>
         <p className={styles.author}>{book.author}</p>
 
         {isSent ? (
           <>
-            <p>
-              Merci ! Votre réservation est enregistrée. La librairie vous
-              contactera dès que le livre sera prêt. Le paiement se fait sur place.
-            </p>
+            <p>{t.reservation.thanks}</p>
             <button className={styles.primary} onClick={onClose}>
-              Fermer
+              {t.reservation.close}
             </button>
           </>
         ) : (
@@ -73,7 +72,7 @@ export default function ReservationForm({ book, onClose }: ReservationFormProps)
             }}
           >
             <label className={styles.field}>
-              Nom
+              {t.reservation.name}
               <input
                 value={customerName}
                 onChange={(event) => setCustomerName(event.target.value)}
@@ -81,7 +80,7 @@ export default function ReservationForm({ book, onClose }: ReservationFormProps)
               />
             </label>
             <label className={styles.field}>
-              Téléphone
+              {t.reservation.phone}
               <input
                 type="tel"
                 value={phone}
@@ -90,7 +89,7 @@ export default function ReservationForm({ book, onClose }: ReservationFormProps)
               />
             </label>
             <label className={styles.field}>
-              Email (facultatif)
+              {t.reservation.email}
               <input
                 type="email"
                 value={email}
@@ -103,10 +102,10 @@ export default function ReservationForm({ book, onClose }: ReservationFormProps)
 
             <div className={styles.actions}>
               <button type="button" className={styles.secondary} onClick={onClose}>
-                Annuler
+                {t.reservation.cancel}
               </button>
               <button type="submit" className={styles.primary} disabled={isSending}>
-                {isSending ? "Envoi…" : "Réserver"}
+                {isSending ? t.reservation.sending : t.reservation.send}
               </button>
             </div>
           </form>

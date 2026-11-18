@@ -1,17 +1,20 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useTranslation } from "@/utils/i18n";
 
 export default function NotFoundPage() {
+  const { t } = useTranslation();
+
   return (
     <>
       <Head>
-        <title>Page introuvable — Librairie Hurlevent</title>
+        <title>{t.notFound.metaTitle}</title>
       </Head>
       <section style={{ padding: "6rem 2rem", textAlign: "center" }}>
-        <h1>Page introuvable</h1>
-        <p style={{ margin: "1rem 0 2rem" }}>Cette page n’existe pas ou a été déplacée.</p>
+        <h1>{t.notFound.title}</h1>
+        <p style={{ margin: "1rem 0 2rem" }}>{t.notFound.text}</p>
         <Link href="/" style={{ textDecoration: "underline" }}>
-          Retour à l’accueil
+          {t.notFound.back}
         </Link>
       </section>
     </>

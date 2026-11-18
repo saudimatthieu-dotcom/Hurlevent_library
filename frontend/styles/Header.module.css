@@ -13,14 +13,27 @@
   font-weight: 600;
 }
 
-.orderButton {
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.orderButton,
+.languageButton {
   padding: 0.6rem 1.2rem;
   border: 1px solid var(--cream);
   border-radius: 999px;
   font-size: 0.95rem;
 }
 
-.orderButton:hover {
+.languageButton {
+  padding: 0.6rem 0.9rem;
+  font-weight: 600;
+}
+
+.orderButton:hover,
+.languageButton:hover {
   background: var(--cream);
   color: var(--olive);
 }

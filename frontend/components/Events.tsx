@@ -1,13 +1,14 @@
 import styles from "@/styles/Events.module.css";
 import type { ShopEvent } from "@/types/ShopEvent";
 import { useState } from "react";
+import { useTranslation, type Locale } from "@/utils/i18n";
 
 type EventsProps = {
   events: ShopEvent[];
 };
 
-function formatDate(isoDate: string): string {
-  return new Date(isoDate).toLocaleDateString("fr-FR", {
+function formatDate(isoDate: string, locale: Locale): string {
+  return new Date(isoDate).toLocaleDateString(locale, {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -31,23 +32,22 @@ function getPastEvents(events: ShopEvent[]): ShopEvent[] {
 }
 
 export default function Events({ events }: EventsProps) {
+  const { t, locale } = useTranslation();
   const [showPast, setShowPast] = useState(false);
   const upcomingEvents = getUpcomingEvents(events);
   const pastEvents = getPastEvents(events);
 
   return (
     <section className={styles.events}>
-      <h2 className={styles.title}>Rencontres & dédicaces</h2>
+      <h2 className={styles.title}>{t.events.title}</h2>
 
-      {upcomingEvents.length === 0 && (
-        <p>Pas de rencontre prévue pour le moment. Suivez-nous sur Instagram !</p>
-      )}
+      {upcomingEvents.length === 0 && <p>{t.events.none}</p>}
 
       <ul className={styles.list}>
         {upcomingEvents.map((event) => (
           <li key={event.id} className={styles.card}>
             <p className={styles.date}>
-              {formatDate(event.date)} · {event.time}
+              {formatDate(event.date, locale)} · {event.time}
             </p>
             <h3>{event.title}</h3>
             <p>{event.description}</p>
@@ -60,9 +60,7 @@ export default function Events({ events }: EventsProps) {
           className={styles.toggle}
           onClick={() => setShowPast(!showPast)}
         >
-          {showPast
-            ? "Masquer les rencontres passées"
-            : "Voir les rencontres passées"}
+          {showPast ? t.events.hidePast : t.events.showPast}
         </button>
       )}
 
@@ -71,7 +69,7 @@ export default function Events({ events }: EventsProps) {
           {pastEvents.map((event) => (
             <li key={event.id} className={styles.card}>
               <p className={styles.date}>
-                {formatDate(event.date)} · {event.time}
+                {formatDate(event.date, locale)} · {event.time}
               </p>
               <h3>{event.title}</h3>
               <p>{event.description}</p>

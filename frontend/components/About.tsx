@@ -1,24 +1,16 @@
 import styles from "@/styles/About.module.css";
+import { useTranslation } from "@/utils/i18n";
 
 export default function About() {
+  const { t } = useTranslation();
+
   return (
     <section className={styles.about}>
-      <h2 className={styles.title}>La librairie</h2>
+      <h2 className={styles.title}>{t.about.title}</h2>
       <div className={styles.text}>
-        <p>
-          Hurlevent est une librairie indépendante et généraliste installée en
-          haut de la rue de Belleville, face au métro Télégraphe.
-        </p>
-        <p>
-          Romans, essais, bandes dessinées, jeunesse : nos libraires choisissent
-          chaque livre et vous conseillent avec plaisir. Tout au long de
-          l’année, nous accueillons des rencontres et des dédicaces avec les
-          auteurs.
-        </p>
-        <p>
-          Un livre n’est pas en rayon ? Nous le commandons pour vous, à retirer
-          en librairie.
-        </p>
+        {t.about.paragraphs.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
       </div>
     </section>
   );

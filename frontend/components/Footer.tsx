@@ -1,12 +1,14 @@
 import styles from "@/styles/Footer.module.css";
+import { useTranslation } from "@/utils/i18n";
 
 export default function Footer() {
+  const { t } = useTranslation();
   const year = new Date().getFullYear();
 
   return (
     <footer className={styles.footer}>
       <p className={styles.logo}>hurlevent</p>
-      <p>238 rue de Belleville, 75020 Paris</p>
+      <p>{t.address}</p>
       <a
         href="https://www.instagram.com/librairie_hurlevent/"
         target="_blank"

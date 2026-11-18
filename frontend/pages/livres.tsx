@@ -5,7 +5,8 @@ import BookCard from "@/components/BookCard";
 import ReservationForm from "@/components/ReservationForm";
 import type { Book, CatalogBook } from "@/types/Book";
 import styles from "@/styles/Books.module.css";
-import { apiRequest, NETWORK_ERROR } from "@/utils/api";
+import { apiRequest } from "@/utils/api";
+import { useTranslation } from "@/utils/i18n";
 
 type BooksPageProps = {
   catalog: CatalogBook[];
@@ -26,6 +27,7 @@ function toAnchor(category: string): string {
 }
 
 export default function BooksPage({ catalog }: BooksPageProps) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const [searchedQuery, setSearchedQuery] = useState("");
   const [results, setResults] = useState<Book[] | null>(null);
@@ -46,11 +48,11 @@ export default function BooksPage({ catalog }: BooksPageProps) {
     setIsSearching(false);
 
     if (!data) {
-      setError(NETWORK_ERROR);
+      setError(t.networkError);
       return;
     }
     if (!data.result) {
-      setError("La recherche a échoué, réessayez dans un instant.");
+      setError(t.books.searchFailed);
       return;
     }
 
@@ -61,18 +63,12 @@ export default function BooksPage({ catalog }: BooksPageProps) {
   return (
     <>
       <Head>
-        <title>Parcourir les livres — Librairie Hurlevent</title>
-        <meta
-          name="description"
-          content="Parcourez les livres de la librairie Hurlevent, réservez-les en ligne et venez les retirer au 238 rue de Belleville. Paiement sur place."
-        />
+        <title>{t.books.metaTitle}</title>
+        <meta name="description" content={t.books.metaDescription} />
       </Head>
       <section className={styles.page}>
-        <h1 className={styles.pageTitle}>Parcourir les livres</h1>
-        <p className={styles.intro}>
-          Parcourez nos livres, réservez-les en ligne et venez les retirer en
-          librairie. Le paiement se fait sur place.
-        </p>
+        <h1 className={styles.pageTitle}>{t.books.title}</h1>
+        <p className={styles.intro}>{t.books.intro}</p>
 
         <form
           className={styles.search}
@@ -87,11 +83,11 @@ export default function BooksPage({ catalog }: BooksPageProps) {
             className={styles.searchInput}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Titre, auteur, ISBN…"
-            aria-label="Rechercher un livre"
+            placeholder={t.books.searchPlaceholder}
+            aria-label={t.books.searchLabel}
           />
           <button type="submit" className={styles.searchButton} disabled={isSearching}>
-            {isSearching ? "Recherche…" : "Rechercher"}
+            {isSearching ? t.books.searching : t.books.search}
           </button>
         </form>
 
@@ -100,18 +96,16 @@ export default function BooksPage({ catalog }: BooksPageProps) {
         {results && (
           <div className={styles.results}>
             <div className={styles.resultsTop}>
-              <h2 className={styles.categoryTitle}>Résultats pour « {searchedQuery} »</h2>
+              <h2 className={styles.categoryTitle}>{t.books.resultsFor(searchedQuery)}</h2>
               <button className={styles.clear} onClick={() => setResults(null)}>
-                Effacer
+                {t.books.clear}
               </button>
             </div>
             {results.length === 0 ? (
-              <p>Aucun livre trouvé. Essayez avec un autre titre ou le nom de l’auteur.</p>
+              <p>{t.books.noResults}</p>
             ) : (
               <>
-                <p className={styles.hint}>
-                  Un livre n’est pas en rayon ? Réservez-le quand même : nous le commandons pour vous.
-                </p>
+                <p className={styles.hint}>{t.books.orderHint}</p>
                 <div className={styles.grid}>
                   {results.map((book) => (
                     <BookCard key={book.isbn} book={book} onReserve={setSelectedBook} />
@@ -123,9 +117,9 @@ export default function BooksPage({ catalog }: BooksPageProps) {
         )}
 
         {categories.length === 0 ? (
-          <p className={styles.hint}>Le catalogue en ligne arrive bientôt. En attendant, utilisez la recherche.</p>
+          <p className={styles.hint}>{t.books.catalogSoon}</p>
         ) : (
-          <nav className={styles.categoryNav} aria-label="Catégories">
+          <nav className={styles.categoryNav} aria-label={t.books.categories}>
             {categories.map((category) => (
               <a key={category} href={`#${toAnchor(category)}`} className={styles.categoryLink}>
                 {category}

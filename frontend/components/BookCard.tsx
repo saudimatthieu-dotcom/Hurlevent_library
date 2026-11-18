@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useState } from "react";
 import styles from "@/styles/BookCard.module.css";
 import type { Book } from "@/types/Book";
+import { useTranslation } from "@/utils/i18n";
 
 type BookCardProps = {
   book: Book;
@@ -18,6 +19,7 @@ function coverSources(book: Book): string[] {
 }
 
 export default function BookCard({ book, onReserve }: BookCardProps) {
+  const { t } = useTranslation();
   const [attempt, setAttempt] = useState(0);
   const cover = coverSources(book)[attempt];
 
@@ -26,7 +28,7 @@ export default function BookCard({ book, onReserve }: BookCardProps) {
       {cover ? (
         <Image
           src={cover}
-          alt={`Couverture de ${book.title}`}
+          alt={t.bookCard.coverAlt(book.title)}
           width={180}
           height={270}
           className={styles.cover}
@@ -39,10 +41,10 @@ export default function BookCard({ book, onReserve }: BookCardProps) {
       )}
       <h3 className={styles.title}>{book.title}</h3>
       <p className={styles.author}>{book.author}</p>
-      {book.note && <p className={styles.note}>« {book.note} »</p>}
+      {book.note && <p className={styles.note}>{t.bookCard.note(book.note)}</p>}
       {onReserve && (
         <button className={styles.reserveButton} onClick={() => onReserve(book)}>
-          Réserver
+          {t.bookCard.reserve}
         </button>
       )}
     </article>
